@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6EF69BEA-AF7E-4650-AA4F-5A929866B4EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoanOptimizer", "src\LoanOptimizer\LoanOptimizer.csproj", "{9C1C80F2-6A0D-48B0-961D-59BA15852C4F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1F269602-BE7B-4E2C-BED9-480FD5DFB8A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoanOptimizer.UnitTests", "tests\LoanOptimizer.UnitTests\LoanOptimizer.UnitTests.csproj", "{0EC583C0-7176-43E4-A476-A1AAF8F70FBA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9C1C80F2-6A0D-48B0-961D-59BA15852C4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C1C80F2-6A0D-48B0-961D-59BA15852C4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C1C80F2-6A0D-48B0-961D-59BA15852C4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C1C80F2-6A0D-48B0-961D-59BA15852C4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EC583C0-7176-43E4-A476-A1AAF8F70FBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EC583C0-7176-43E4-A476-A1AAF8F70FBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EC583C0-7176-43E4-A476-A1AAF8F70FBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EC583C0-7176-43E4-A476-A1AAF8F70FBA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9C1C80F2-6A0D-48B0-961D-59BA15852C4F} = {6EF69BEA-AF7E-4650-AA4F-5A929866B4EF}
+		{0EC583C0-7176-43E4-A476-A1AAF8F70FBA} = {1F269602-BE7B-4E2C-BED9-480FD5DFB8A9}
+	EndGlobalSection
+EndGlobal
