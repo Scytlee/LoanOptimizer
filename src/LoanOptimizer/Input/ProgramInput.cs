@@ -18,11 +18,11 @@ public class ProgramInputValidator : AbstractValidator<ProgramInput>
 
         RuleForEach(x => x.Loans)
             .SetValidator(new LoanInputValidator());
-        
+
         RuleFor(x => x.PaymentPlan)
             .NotEmpty()
             .WithMessage("At least one payment day is required.");
-        
+
         RuleForEach(x => x.PaymentPlan)
             .SetValidator(new PaymentDayInputValidator());
     }

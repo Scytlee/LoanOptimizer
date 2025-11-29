@@ -20,7 +20,7 @@ public class PaymentDayInputValidator : AbstractValidator<PaymentDayInput>
         RuleFor(x => x)
             .Must(HaveExactlyOneBudgetPropertyProvided)
             .WithMessage("Exactly one of OnlyInstalments or TotalBudget must be provided.");
-        
+
         RuleFor(x => x.TotalBudget)
             .GreaterThanOrEqualTo(0)
             .When(x => x.TotalBudget < 0)
@@ -30,7 +30,7 @@ public class PaymentDayInputValidator : AbstractValidator<PaymentDayInput>
     private static bool HaveExactlyOneBudgetPropertyProvided(PaymentDayInput input)
     {
         var propertiesSet = 0;
-        
+
         if (input.OnlyInstalments)
         {
             propertiesSet++;

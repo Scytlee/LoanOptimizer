@@ -1,4 +1,4 @@
-﻿using LoanOptimizer;
+using LoanOptimizer;
 using LoanOptimizer.Input;
 using LoanOptimizer.Models;
 using System.Text.Json;
@@ -41,9 +41,12 @@ if (!results.IsValid)
 }
 
 var loans = input.Loans.Select((loanInput, index) => new LoanData
-                 {
-                     Id = index + 1, Amount = loanInput.Amount, YearlyInterestRate = loanInput.YearlyInterestRate, StartDate = loanInput.StartDate
-                 })
+{
+    Id = index + 1,
+    Amount = loanInput.Amount,
+    YearlyInterestRate = loanInput.YearlyInterestRate,
+    StartDate = loanInput.StartDate
+})
                  .ToArray();
 
 var initialState = loans.Zip(input.Loans)

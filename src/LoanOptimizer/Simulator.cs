@@ -17,7 +17,7 @@ public static class Simulator
         var stopwatch = Stopwatch.StartNew();
 
         var simulationResult = new SimulationResult();
-        
+
         // Mark all payments before the first payment day as paid
         foreach (var payment in initialState.SelectMany(loan => loan.Payments.Where(payment => payment.Date < paymentPlan.First().Date)))
         {
@@ -25,13 +25,13 @@ public static class Simulator
         }
 
         var currentState = initialState.Select(loan => new LoanState { Payments = loan.Payments }).ToArray();
-        
+
         // Iterate through all payment days
         for (var i = 0; i < paymentPlan.Length; i++)
         {
             var currentPaymentDay = paymentPlan[i];
             var nextPaymentDay = i + 1 < paymentPlan.Length ? paymentPlan[i + 1] : null;
-            
+
             if (currentPaymentDay.Type is PaymentDayType.InstalmentsAndOverpayments)
             {
                 var remainingAmountsToPayOff = currentState.Select((loanState, index) => loanState.CalculateAmountToPay(loans[index], currentPaymentDay.Date)).ToArray();
@@ -44,7 +44,7 @@ public static class Simulator
                 else
                 {
                     var currentStateCopy = currentState.Select(loanState => new LoanState { Payments = loanState.Payments }).ToArray();
-                    
+
                     decimal? adjustedInstalmentsToPay = null;
                     do
                     {
@@ -62,7 +62,7 @@ public static class Simulator
                         {
                             break;
                         }
-                
+
                         // Overpaying a loan might lower instalments due between current payment day and the next one, or pay the loan off completely
                         // Lower instalments will allow for higher overpayments, so we need to calculate new instalment sum
                         adjustedInstalmentsToPay = currentState.SelectPaymentsInInterval(PaymentType.Instalment, currentPaymentDay.Date, nextPaymentDay?.Date).Sum(payment => payment.Amount);
@@ -71,7 +71,7 @@ public static class Simulator
                     while (adjustedInstalmentsToPay < currentPaymentDay.InstalmentsToPay);
                 }
             }
-            
+
             // Update simulation state and break the loop if simulation is finished
             UpdateStateCompletion(currentState, simulationResult, currentPaymentDay, nextPaymentDay);
             if (simulationResult.Finished)
@@ -98,10 +98,10 @@ public static class Simulator
             // Simulation is invalid, do nothing
             return;
         }
-        
+
         // If instalment budget is not provided, calculate it
         instalmentBudget ??= currentState.SelectPaymentsInInterval(PaymentType.Instalment, currentPaymentDay.Date, nextPaymentDay?.Date).Sum(instalment => instalment.Amount);
-        
+
         currentPaymentDay.InstalmentsToPay = instalmentBudget;
 
         // If overpayments are to be paid on this day, total budget must cover all instalments
@@ -132,19 +132,19 @@ public static class Simulator
             // Simulation is invalid, do nothing
             return;
         }
-        
+
         var unpaidLoanIndices = currentState.Select((loan, index) => (Loan: loan, Index: index)).Where(tuple => !tuple.Loan.Paid).Select(tuple => tuple.Index).ToArray();
         var unpaidLoans = unpaidLoanIndices.Select(loanIndex => currentState[loanIndex]).ToArray();
         var unpaidLoanCaches = unpaidLoanIndices.Select(loanIndex => new LoanCache(currentState[loanIndex], loans[loanIndex], currentPaymentDay.Date)).ToArray();
         var maximumOverpayments = unpaidLoanIndices.Select(loanIndex => remainingAmountsToPayOff[loanIndex]).ToArray();
-        
+
         // Compute initial overpayment strategy
         // This strategy will be either the most optimal, or very close to it
         var initialOverpayments = CalculateInitialOverpayments(unpaidLoans, unpaidLoanCaches, maximumOverpayments, currentPaymentDay, overpaymentStep);
-        
+
         // Adjust overpayment strategy to be the most optimal
         var adjustedOverpayments = AdjustOverpayments(unpaidLoanCaches, initialOverpayments, maximumOverpayments, overpaymentStep);
-        
+
         // Apply the computed overpayment strategy
         for (var i = 0; i < unpaidLoans.Length; i++)
         {
@@ -154,14 +154,14 @@ public static class Simulator
             }
         }
     }
-    
+
     private static decimal[] CalculateInitialOverpayments(LoanState[] loans, LoanCache[] loanCaches, decimal[] maximumOverpayments, PaymentDay currentPaymentDay, decimal overpaymentStep)
     {
         var overpaymentBudgetLeft = currentPaymentDay.OverpaymentBudget!.Value;
 
         var currentMaximumOverpayments = new decimal[loans.Length];
         Array.Copy(maximumOverpayments, currentMaximumOverpayments, loans.Length);
-        
+
         var overpaymentsToPerform = new decimal[loans.Length];
 
         while (overpaymentBudgetLeft > 0 && currentMaximumOverpayments.Any(amount => amount > 0))
@@ -178,12 +178,12 @@ public static class Simulator
 
                 var overpayment = CalculateOverpayment(overpaymentStep, overpaymentBudgetLeft, currentMaximumOverpayments[i]);
                 var interestLoss = loanCaches[i].GetOrCalculate(overpaymentsToPerform[i]).OverallInterest - loanCaches[i].GetOrCalculate(overpaymentsToPerform[i] + overpayment).OverallInterest;
-                
+
                 if (interestLoss <= maxInterestLoss)
                 {
                     continue;
                 }
-                
+
                 maxIndex = i;
                 maxIndexOverpayment = overpayment;
                 maxInterestLoss = interestLoss;
@@ -203,12 +203,12 @@ public static class Simulator
         {
             return 0;
         }
-        
+
         var maximumOverpayment = Math.Min(overpaymentStep, overpaymentBudget);
 
         return amountToPay <= maximumOverpayment ? amountToPay : maximumOverpayment;
     }
-    
+
     private static decimal[] AdjustOverpayments(LoanCache[] loanCaches, decimal[] initialOverpayments, decimal[] maximumOverpayments, decimal overpaymentStep)
     {
         const decimal stepDecreaseFactor = 0.2m;
@@ -217,7 +217,7 @@ public static class Simulator
 
         var step = CalculateNextStep(overpaymentStep);
         var bestOverpayments = initialOverpayments;
-    
+
         while (step >= minimumStep)
         {
             var currentBestOverpayments = arrayPool.Rent(bestOverpayments.Length);
@@ -228,7 +228,7 @@ public static class Simulator
 
             Array.Copy(currentBestOverpayments, bestOverpayments, bestOverpayments.Length);
             arrayPool.Return(currentBestOverpayments);
-        
+
             // Decrease the step size for the next iteration
             step = CalculateNextStep(step);
             continue;
@@ -243,11 +243,11 @@ public static class Simulator
                     Array.Copy(array, currentBestOverpayments, currentBestOverpayments.Length);
                     currentMinimumNonZeroOverpayments = nonZeroOverpayments;
                 }
-                
+
                 arrayPool.Return(array);
             }
         }
-    
+
         return bestOverpayments;
 
         decimal CalculateNextStep(decimal currentStep)
@@ -256,15 +256,15 @@ public static class Simulator
             {
                 return minimumStep - 0.01m;
             }
-            
+
             return Math.Max(minimumStep, Math.Round(currentStep * stepDecreaseFactor, 2, MidpointRounding.AwayFromZero));
         }
     }
-    
+
     private static void GenerateArrays(decimal[] initialValues, decimal step, decimal[] maxValues, Action<decimal[]> processArray)
     {
         var arrayPool = ArrayPool<decimal>.Shared;
-        
+
         Backtrack(0, initialValues.Length, initialValues.Sum(), arrayPool.Rent(initialValues.Length), GeneratePossibleValues(initialValues, step, maxValues));
         return;
 
@@ -322,14 +322,14 @@ public static class Simulator
                 overpayment.Paid = true;
             }
         }
-            
+
         // Mark all instalments due between current payment day and the next one as paid
         var instalmentsPaid = currentState.SelectPaymentsInInterval(PaymentType.Instalment, currentPaymentDay.Date, nextPaymentDay?.Date);
         foreach (var instalment in instalmentsPaid)
         {
             instalment.Paid = true;
         }
-        
+
         // If all payments for a loan are paid, mark the loan as paid
         foreach (var loan in currentState.Where(loan => !loan.Paid))
         {
@@ -338,7 +338,7 @@ public static class Simulator
                 loan.Paid = true;
             }
         }
-        
+
         // If all loans are paid, the simulation is finished
         if (currentState.All(loan => loan.Paid))
         {
@@ -376,7 +376,7 @@ public static class Simulator
                 Console.WriteLine("No overpayments");
             }
         }
-            
+
         var interestPaidWithNoOverpayments = initialState.Sum(loan => loan.Payments.Last().OverallInterest);
         var interestPaidAfterSimulatedOverpayments = currentState.Sum(loan => loan.Payments.Last().OverallInterest);
         var interestSaved = interestPaidWithNoOverpayments - interestPaidAfterSimulatedOverpayments;

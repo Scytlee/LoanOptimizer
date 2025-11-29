@@ -40,7 +40,7 @@ public class LoanInputValidator : AbstractValidator<LoanInput>
         RuleFor(x => x)
             .Must(x => x.StartDate < x.FirstInstalmentDate)
             .WithMessage("FirstInstalmentDate must be after StartDate.");
-        
+
         RuleForEach(x => x.Overpayments)
             .SetValidator(new OverpaymentInputValidator());
     }

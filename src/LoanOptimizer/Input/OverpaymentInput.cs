@@ -15,7 +15,7 @@ public class OverpaymentInputValidator : AbstractValidator<OverpaymentInput>
         RuleFor(x => x.Date)
             .NotEmpty()
             .WithMessage("Date is required.");
-        
+
         RuleFor(x => x.Amount)
             .GreaterThan(0)
             .WithMessage("Amount must be a positive non-zero value.");
