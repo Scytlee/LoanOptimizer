@@ -1,110 +1,50 @@
 {
-  "Loans": [
-    {
-      "Amount": 5300,
-      "YearlyInterestRate": 12.49,
-      "StartDate": "2023-10-13",
-      "FirstInstalmentDate": "2023-11-10",
-      "NumberOfInstalments": 36,
-      "Overpayments": [
+    "Loans": [
         {
-          "Date": "2023-12-29",
-          "Amount": 2700
+            "Amount": 8000,
+            "YearlyInterestRate": 10.49,
+            "StartDate": "2024-05-02",
+            "FirstInstalmentDate": "2024-06-10",
+            "NumberOfInstalments": 36,
+            "Overpayments": []
         },
         {
-          "Date": "2024-01-04",
-          "Amount": 1186
+            "Amount": 4000,
+            "YearlyInterestRate": 12.99,
+            "StartDate": "2025-09-11",
+            "FirstInstalmentDate": "2025-10-11",
+            "NumberOfInstalments": 48,
+            "Overpayments": []
         },
         {
-          "Date": "2024-01-19",
-          "Amount": 679
+            "Amount": 3000,
+            "YearlyInterestRate": 8.24,
+            "StartDate": "2025-11-25",
+            "FirstInstalmentDate": "2025-12-15",
+            "NumberOfInstalments": 36,
+            "Overpayments": []
         }
-      ]
-    },
-    {
-      "Amount": 2950,
-      "YearlyInterestRate": 12.74,
-      "StartDate": "2023-10-03",
-      "FirstInstalmentDate": "2023-11-10",
-      "NumberOfInstalments": 36,
-      "Overpayments": [
+    ],
+    "PaymentPlan": [
         {
-          "Date": "2023-12-29",
-          "Amount": 1550
+            "Date": "2025-12-10",
+            "OnlyInstalments": true
         },
         {
-          "Date": "2024-01-04",
-          "Amount": 620
+            "Date": "2026-01-10",
+            "OnlyInstalments": true
         },
         {
-          "Date": "2024-01-19",
-          "Amount": 380
-        }
-      ]
-    },
-    {
-      "Amount": 13840,
-      "YearlyInterestRate": 12.99,
-      "StartDate": "2023-07-06",
-      "FirstInstalmentDate": "2023-08-10",
-      "NumberOfInstalments": 10,
-      "Overpayments": [
-        {
-          "Date": "2024-01-19",
-          "Amount": 3492
-        }
-      ]
-    },
-    {
-      "Amount": 10164.73,
-      "YearlyInterestRate": 12.99,
-      "StartDate": "2023-06-29",
-      "FirstInstalmentDate": "2023-08-10",
-      "NumberOfInstalments": 8
-    },
-    {
-      "Amount": 4400,
-      "YearlyInterestRate": 13.49,
-      "StartDate": "2023-04-16",
-      "FirstInstalmentDate": "2023-05-15",
-      "NumberOfInstalments": 16,
-      "Overpayments": [
-        {
-          "Date": "2024-01-04",
-          "Amount": 559
+            "Date": "2026-02-10",
+            "TotalBudget": 3550
         },
         {
-          "Date": "2024-01-19",
-          "Amount": 1164
-        }
-      ]
-    },
-    {
-      "Amount": 7500,
-      "YearlyInterestRate": 14.99,
-      "StartDate": "2023-02-20",
-      "FirstInstalmentDate": "2023-03-20",
-      "NumberOfInstalments": 17,
-      "Overpayments": [
-        {
-          "Date": "2024-01-04",
-          "Amount": 555
+            "Date": "2026-03-10",
+            "TotalBudget": 3550
         },
         {
-          "Date": "2024-01-19",
-          "Amount": 1783
+            "Date": "2026-04-10",
+            "TotalBudget": 3550
         }
-      ]
-    }
-  ],
-  "PaymentPlan": [
-    {
-      "Date": "2024-02-05",
-      "TotalBudget": 5000
-    },
-    {
-      "Date": "2024-03-05",
-      "TotalBudget": 3370
-    }
-  ]
+    ]
 }
