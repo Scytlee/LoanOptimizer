@@ -125,7 +125,7 @@ public static class Simulator
         }
     }
 
-    private static void HandleOverpayments(LoanData[] loans, LoanState[] currentState, SimulationResult simulationResult, PaymentDay currentPaymentDay, decimal[] remainingAmountsToPayOff, decimal overpaymentStep = 25)
+    private static void HandleOverpayments(LoanData[] loans, LoanState[] currentState, SimulationResult simulationResult, PaymentDay currentPaymentDay, decimal[] remainingAmountsToPayOff, decimal overpaymentStep = 1m)
     {
         if (simulationResult.Finished)
         {
@@ -177,7 +177,7 @@ public static class Simulator
                 }
 
                 var overpayment = CalculateOverpayment(overpaymentStep, overpaymentBudgetLeft, currentMaximumOverpayments[i]);
-                var interestLoss = loanCaches[i].GetOrCalculate(overpaymentsToPerform[i]).OverallInterest - loanCaches[i].GetOrCalculate(overpaymentsToPerform[i] + overpayment).OverallInterest;
+                var interestLoss = loanCaches[i].GetOrCalculate(overpaymentsToPerform[i]) - loanCaches[i].GetOrCalculate(overpaymentsToPerform[i] + overpayment);
 
                 if (interestLoss <= maxInterestLoss)
                 {
@@ -235,7 +235,7 @@ public static class Simulator
 
             void ProcessArray(decimal[] array)
             {
-                var overallInterest = Enumerable.Range(0, bestOverpayments.Length).Select(index => loanCaches[index].GetOrCalculate(array[index])).Sum(state => state.OverallInterest);
+                var overallInterest = Enumerable.Range(0, bestOverpayments.Length).Select(index => loanCaches[index].GetOrCalculate(array[index])).Sum();
                 var nonZeroOverpayments = Enumerable.Range(0, bestOverpayments.Length).Count(index => array[index] > 0);
                 if (overallInterest < currentMinimumOverallInterest || overallInterest == currentMinimumOverallInterest && nonZeroOverpayments < currentMinimumNonZeroOverpayments)
                 {

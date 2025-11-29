@@ -7,7 +7,7 @@ public class LoanCache
     public static int Hits { get; private set; }
     public static int Misses { get; private set; }
 
-    private readonly Dictionary<decimal, (decimal OverallInterest, decimal Nothing)> _cache = new();
+    private readonly Dictionary<decimal, decimal> _cache = new();
     private readonly LoanState _loanState;
     private readonly LoanData _loan;
     private readonly DateTime _overpaymentDate;
@@ -18,10 +18,10 @@ public class LoanCache
         _loan = loan;
         _overpaymentDate = overpaymentDate;
 
-        _cache[0] = (_loanState.Payments.Last().OverallInterest, 0);
+        _cache[0] = _loanState.Payments.Last().OverallInterest;
     }
 
-    public (decimal OverallInterest, decimal Nothing) GetOrCalculate(decimal overpayment)
+    public decimal GetOrCalculate(decimal overpayment)
     {
         if (!_cache.TryGetValue(overpayment, out var result))
         {

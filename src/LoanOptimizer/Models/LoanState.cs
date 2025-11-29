@@ -197,11 +197,11 @@ public class LoanState
         }
     }
 
-    public (decimal OverallInterest, decimal Nothing) ComputeStateAfterOverpayments(LoanData loan, params OverpaymentInput[] overpayments)
+    public decimal ComputeStateAfterOverpayments(LoanData loan, params OverpaymentInput[] overpayments)
     {
         if (Payments.Last() is { Type: PaymentType.Overpayment })
         {
-            return (Payments.Last().OverallInterest, 0);
+            return Payments.Last().OverallInterest;
         }
 
         var dailyInterestRate = loan.YearlyInterestRate / 365m;
@@ -249,7 +249,7 @@ public class LoanState
                         if (remainingPrincipal + interest <= overpayment.Amount) // loan paid off
                         {
                             interest = Math.Round(interest, 2);
-                            return (overallInterest + interest, 0);
+                            return overallInterest + interest;
                         }
 
                         // principal paid off, interest remaining
@@ -275,7 +275,7 @@ public class LoanState
             // (And if it happens, I blame the customer for taking a loan with a through-the-roof interest rate)
             if (remainingPrincipal + interest <= emi)
             {
-                return (overallInterest, 0);
+                return overallInterest;
             }
 
             var principalPart = emi - interest;
