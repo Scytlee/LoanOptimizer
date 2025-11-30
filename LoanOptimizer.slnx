@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/LoanOptimizer.Application/LoanOptimizer.Application.csproj" />
+    <Project Path="src/LoanOptimizer.ConsoleUI/LoanOptimizer.ConsoleUI.csproj" />
     <Project Path="src/LoanOptimizer.SharedKernel/LoanOptimizer.SharedKernel.csproj" />
     <Project Path="src/LoanOptimizer/LoanOptimizer.csproj" />
   </Folder>
