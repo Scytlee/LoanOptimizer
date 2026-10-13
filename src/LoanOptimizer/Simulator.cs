@@ -313,14 +313,11 @@ public static class Simulator
             return;
         }
 
-        if (currentPaymentDay.Type is PaymentDayType.InstalmentsAndOverpayments)
+        // Mark all overpayments in the current interval as paid
+        var overpaymentsPaid = currentState.SelectPaymentsInInterval(PaymentType.Overpayment, currentPaymentDay.Date, nextPaymentDay?.Date);
+        foreach (var overpayment in overpaymentsPaid)
         {
-            // Mark all overpayments paid on this day as paid
-            var overpaymentsPaid = currentState.SelectPaymentsOnDate(PaymentType.Overpayment, currentPaymentDay.Date);
-            foreach (var overpayment in overpaymentsPaid)
-            {
-                overpayment.Paid = true;
-            }
+            overpayment.Paid = true;
         }
 
         // Mark all instalments due between current payment day and the next one as paid

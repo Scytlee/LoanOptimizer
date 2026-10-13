@@ -68,7 +68,7 @@ public static class LoanDataExtensions
             }
 
             var difference = estimatedEmi - payments.Last().Amount;
-            if (difference > 0 && difference < numberOfInstalments / 100m)
+            if (difference > 0 && difference <= numberOfInstalments / 100m)
             {
                 return payments.AsEnumerable();
             }
